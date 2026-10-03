@@ -334,3 +334,101 @@ if (mapa) {
     });
 
 }
+
+// ==========================================
+// MAPA REAL - STATUS DA CIDADE
+// ==========================================
+
+const cityMapElement = document.getElementById("cityMap");
+
+if (cityMapElement && typeof L !== "undefined") {
+
+    // Centro de Extremoz/RN
+    const latitude = -5.706;
+    const longitude = -35.307;
+
+    const cityMap = L.map("cityMap", {
+        zoomControl: false,
+        attributionControl: true
+    }).setView([latitude, longitude], 13);
+
+    // OpenStreetMap
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap"
+    }).addTo(cityMap);
+
+
+    // ==========================================
+    // PONTOS DE EXEMPLO
+    // ==========================================
+
+    const pontosCidade = [
+
+        {
+            latitude: -5.7043,
+            longitude: -35.3043,
+            titulo: "Buraco na via",
+            categoria: "Buracos e vias",
+            status: "Em aberto"
+        },
+
+        {
+            latitude: -5.6995,
+            longitude: -35.3005,
+            titulo: "Problema na iluminação",
+            categoria: "Iluminação pública",
+            status: "Em atendimento"
+        },
+
+        {
+            latitude: -5.7105,
+            longitude: -35.3090,
+            titulo: "Limpeza urbana",
+            categoria: "Limpeza urbana",
+            status: "Resolvido"
+        }
+
+    ];
+
+
+    // ==========================================
+    // CRIA OS MARCADORES
+    // ==========================================
+
+    pontosCidade.forEach(function(ponto) {
+
+        let cor = "#DC3545";
+
+        if (ponto.status === "Em atendimento") {
+            cor = "#F4C430";
+        }
+
+        if (ponto.status === "Resolvido") {
+            cor = "#2E8B57";
+        }
+
+        const marcador = L.circleMarker(
+            [ponto.latitude, ponto.longitude],
+            {
+                radius: 7,
+                color: "#ffffff",
+                weight: 2,
+                fillColor: cor,
+                fillOpacity: 1
+            }
+        );
+
+        marcador.bindPopup(`
+            <strong>${ponto.titulo}</strong>
+            <br>
+            ${ponto.categoria}
+            <br>
+            <strong>Status:</strong> ${ponto.status}
+        `);
+
+        marcador.addTo(cityMap);
+
+    });
+
+}
