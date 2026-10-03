@@ -1558,3 +1558,18 @@ body.dark-mode .fake-map {
     }
 
 }
+
+#cityMap {
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+#cityMap .leaflet-control-zoom {
+    display: none;
+}
+
+#cityMap .leaflet-control-attribution {
+    font-size: 8px;
+}
