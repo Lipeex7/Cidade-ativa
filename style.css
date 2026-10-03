@@ -1573,3 +1573,29 @@ body.dark-mode .fake-map {
 #cityMap .leaflet-control-attribution {
     font-size: 8px;
 }
+
+/*dark mode richas*/
+
+body.dark-mode .stat-icon {
+    color: #17251E;
+}
+
+/* Ícone de solicitações */
+body.dark-mode .stat-icon.total {
+    color: #0B5D3B;
+}
+
+/* Ícone de resolvidos */
+body.dark-mode .stat-icon.resolved {
+    color: #2E8B57;
+}
+
+/* Ícone de andamento */
+body.dark-mode .stat-icon.progress {
+    color: #8A6800;
+}
+
+/* Ícone de aguardando análise */
+body.dark-mode .stat-icon.waiting {
+    color: #6B3FA0;
+}
