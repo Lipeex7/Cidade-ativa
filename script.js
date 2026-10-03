@@ -239,3 +239,98 @@ if (themeToggle) {
     });
 
 }
+
+// ========================================
+// MAPA REAL DE EXTREMOZ
+// ========================================
+
+const mapa = document.getElementById("realMap");
+
+if (mapa) {
+
+    // Coordenadas aproximadas do centro de Extremoz
+    const latitude = -5.706;
+    const longitude = -35.307;
+
+    // Cria o mapa
+    const map = L.map("realMap").setView(
+        [latitude, longitude],
+        13
+    );
+
+    // Adiciona o mapa do OpenStreetMap
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            attribution:
+                '&copy; OpenStreetMap contributors',
+            maxZoom: 19
+        }
+    ).addTo(map);
+
+    // Ocorrências de exemplo
+    const pontos = [
+
+        {
+            latitude: -5.7043,
+            longitude: -35.3043,
+            titulo: "Buraco na via",
+            categoria: "Buracos e vias",
+            status: "Em aberto"
+        },
+
+        {
+            latitude: -5.6995,
+            longitude: -35.3005,
+            titulo: "Problema na iluminação",
+            categoria: "Iluminação pública",
+            status: "Em atendimento"
+        },
+
+        {
+            latitude: -5.7105,
+            longitude: -35.3090,
+            titulo: "Limpeza urbana",
+            categoria: "Limpeza urbana",
+            status: "Resolvido"
+        }
+
+    ];
+
+    // Cria os pontos no mapa
+    pontos.forEach(function(ponto) {
+
+        let cor = "red";
+
+        if (ponto.status === "Em atendimento") {
+            cor = "orange";
+        }
+
+        if (ponto.status === "Resolvido") {
+            cor = "green";
+        }
+
+        const marcador = L.circleMarker(
+            [ponto.latitude, ponto.longitude],
+            {
+                radius: 9,
+                color: "#ffffff",
+                weight: 2,
+                fillColor: cor,
+                fillOpacity: 0.9
+            }
+        );
+
+        marcador.bindPopup(`
+            <strong>${ponto.titulo}</strong>
+            <br>
+            <span>${ponto.categoria}</span>
+            <br>
+            <strong>Status:</strong> ${ponto.status}
+        `);
+
+        marcador.addTo(map);
+
+    });
+
+}
