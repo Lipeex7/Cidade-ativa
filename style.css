@@ -1540,3 +1540,21 @@ body.dark-mode .fake-map {
     transform: translateY(0);
   }
 }
+
+/* Mapa real */
+#realMap {
+    width: 100%;
+    height: 520px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+/* Ajuste para celular */
+@media (max-width: 760px) {
+
+    #realMap {
+        height: 420px;
+    }
+
+}
