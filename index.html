@@ -12,23 +12,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" 
+
+    <link rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 
 <body>
 
-    <!--cabeçalho-->
+    <!-- Cabeçalho -->
 
     <header class="header">
         <div class="container header-content">
 
+            <!-- Logo Cidade Ativa -->
             <a href="index.html" class="logo" aria-label="Cidade Ativa">
-                <span class="logo-mark" aria-hidden="true">CA</span>
-                <div class="logo-text">
-                    <strong>Cidade Ativa</strong>
-                    <span>Prefeitura Municipal de Extremoz</span>
-                </div>
+                <img
+                    src="images/logo.png"
+                    alt="Cidade Ativa - Prefeitura Municipal de Extremoz"
+                    class="logo-image"
+                >
             </a>
 
             <nav class="nav" id="mainNav">
@@ -40,6 +42,7 @@
             </nav>
 
             <div class="header-actions">
+
                 <button class="theme-btn" id="themeToggle" aria-label="Alternar tema">
                     🌙
                 </button>
@@ -51,6 +54,7 @@
                 <button class="menu-btn" id="menuToggle" aria-label="Abrir menu">
                     ☰
                 </button>
+
             </div>
 
         </div>
@@ -59,6 +63,7 @@
     <main>
 
         <section class="hero" id="inicio">
+
             <div class="container hero-grid">
 
                 <div class="hero-content">
@@ -79,16 +84,23 @@
                     </p>
 
                     <div class="hero-buttons">
-                        <button class="btn btn-primary btn-large" onclick="scrollToSection('registrar')">
+
+                        <button
+                            class="btn btn-primary btn-large"
+                            onclick="scrollToSection('registrar')">
                             Registrar um problema →
                         </button>
 
-                        <button class="btn btn-outline btn-large" onclick="scrollToSection('acompanhar')">
+                        <button
+                            class="btn btn-outline btn-large"
+                            onclick="scrollToSection('acompanhar')">
                             Acompanhar solicitação
                         </button>
+
                     </div>
 
                     <div class="hero-trust">
+
                         <div class="avatars">
                             <span>J</span>
                             <span>M</span>
@@ -99,8 +111,8 @@
                         <div>
                             <strong>3.675 cidadãos</strong>
                             <small>já utilizaram a plataforma</small>
-                            
                         </div>
+
                     </div>
 
                 </div>
@@ -111,14 +123,16 @@
 
                         <div class="city-top">
                             <span>STATUS DA CIDADE</span>
+
                             <span class="live">
                                 <i></i> Ao vivo
                             </span>
                         </div>
 
-                       <div class="city-map" id="cityMap"></div>
+                        <div class="city-map" id="cityMap"></div>
 
                         <div class="city-footer">
+
                             <div>
                                 <strong>68%</strong>
                                 <small>resolvidos</small>
@@ -133,6 +147,7 @@
                                 <strong>18</strong>
                                 <small>equipes ativas</small>
                             </div>
+
                         </div>
 
                     </div>
@@ -140,15 +155,18 @@
                 </div>
 
             </div>
+
         </section>
 
 
-        <!---Indicar--->
+        <!-- Indicadores -->
 
         <section class="section indicators-section">
+
             <div class="container">
 
                 <div class="section-heading">
+
                     <div>
                         <span class="section-label">PANORAMA</span>
                         <h2>A cidade em números</h2>
@@ -158,74 +176,95 @@
                         Dados atualizados das solicitações registradas
                         pelos cidadãos.
                     </p>
+
                 </div>
 
                 <div class="stats-grid">
 
                     <div class="stat-card">
+
                         <div class="stat-icon blue">📋</div>
+
                         <div>
                             <span>Total de solicitações</span>
                             <strong data-stat="total">3.675</strong>
                             <small>+12,4% este mês</small>
                         </div>
+
                     </div>
 
                     <div class="stat-card">
+
                         <div class="stat-icon green">✓</div>
+
                         <div>
                             <span>Problemas resolvidos</span>
                             <strong data-stat="resolved">2.499</strong>
                             <small>68% do total</small>
                         </div>
+
                     </div>
 
                     <div class="stat-card">
+
                         <div class="stat-icon orange">◷</div>
+
                         <div>
                             <span>Em andamento</span>
                             <strong data-stat="progress">772</strong>
                             <small>21% do total</small>
                         </div>
+
                     </div>
 
                     <div class="stat-card">
+
                         <div class="stat-icon purple">◌</div>
+
                         <div>
                             <span>Aguardando análise</span>
                             <strong data-stat="waiting">275</strong>
                             <small>11% do total</small>
                         </div>
+
                     </div>
 
                 </div>
 
             </div>
+
         </section>
 
 
-        <!--categorias-->
+        <!-- Categorias -->
 
         <section class="section categories-section" id="categorias">
+
             <div class="container">
 
                 <div class="section-heading centered">
+
                     <span class="section-label">SERVIÇOS</span>
+
                     <h2>O que precisa ser resolvido?</h2>
+
                     <p>
                         Escolha uma categoria e informe o problema encontrado.
                     </p>
+
                 </div>
 
                 <div class="categories-grid" id="categoriesGrid"></div>
 
             </div>
+
         </section>
 
 
-        <!--opções de registro -->
+        <!-- Registro -->
 
         <section class="section register-section" id="registrar">
+
             <div class="container">
 
                 <div class="form-wrapper">
@@ -244,140 +283,323 @@
                         <div class="form-steps">
 
                             <div class="form-step active">
+
                                 <span>1</span>
+
                                 <div>
                                     <strong>Informe o problema</strong>
                                     <small>Conte o que aconteceu</small>
                                 </div>
+
                             </div>
 
                             <div class="form-step">
+
                                 <span>2</span>
+
                                 <div>
                                     <strong>Localização</strong>
                                     <small>Onde está o problema?</small>
                                 </div>
+
                             </div>
 
                             <div class="form-step">
+
                                 <span>3</span>
+
                                 <div>
                                     <strong>Envie</strong>
                                     <small>Receba seu protocolo</small>
                                 </div>
+
                             </div>
 
                         </div>
 
                     </div>
 
+
                     <form id="reportForm" class="report-form">
 
                         <div class="form-row">
 
                             <div class="form-group">
-                                <label for="category">Categoria *</label>
+
+                                <label for="category">
+                                    Categoria *
+                                </label>
 
                                 <select id="category" required>
-                                    <option value="">Selecione uma categoria</option>
+
+                                    <option value="">
+                                        Selecione uma categoria
+                                    </option>
+
                                 </select>
+
                             </div>
+
 
                             <div class="form-group">
-                                <label for="title">Título *</label>
-                                <input type="text" id="title" placeholder="Ex.: Buraco na avenida" required>
+
+                                <label for="title">
+                                    Título *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="title"
+                                    placeholder="Ex.: Buraco na avenida"
+                                    required
+                                >
+
                             </div>
 
                         </div>
 
-                        <div class="form-group">
-                            <label for="description">Descrição *</label>
 
-                            <textarea id="description" rows="4"
-                                placeholder="Descreva o problema com o máximo de detalhes..." required></textarea>
+                        <div class="form-group">
+
+                            <label for="description">
+                                Descrição *
+                            </label>
+
+                            <textarea
+                                id="description"
+                                rows="4"
+                                placeholder="Descreva o problema com o máximo de detalhes..."
+                                required
+                            ></textarea>
+
                         </div>
+
 
                         <div class="form-row">
 
                             <div class="form-group">
-                                <label for="address">Endereço *</label>
-                                <input type="text" id="address" placeholder="Rua, avenida, número..." required>
+
+                                <label for="address">
+                                    Endereço *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="address"
+                                    placeholder="Rua, avenida, número..."
+                                    required
+                                >
+
                             </div>
 
+
                             <div class="form-group">
-                                <label for="neighborhood">Bairro, comunidade ou localidade *</label>
+
+                                <label for="neighborhood">
+                                    Bairro, comunidade ou localidade *
+                                </label>
+
                                 <select id="neighborhood" required>
-                                    <option value="">Selecione uma localização</option>
+
+                                    <option value="">
+                                        Selecione uma localização
+                                    </option>
+
                                     <optgroup label="Bairros e conjuntos">
-                                        <option>Centro</option><option>Alto Extremoz</option>
-                                        <option>Central Parque I</option><option>Central Parque II</option>
-                                        <option>Central Parque III</option><option>Central Parque Clube</option>
-                                        <option>Jardins de Extremoz</option><option>Jardins de Extremoz II</option>
-                                        <option>Moinho dos Ventos</option><option>Nova Extremoz</option>
-                                        <option>Parque das Flores</option><option>Parque das Jaqueiras</option>
-                                        <option>Parque do Servidor</option><option>Portal do Sol</option>
-                                        <option>Quintas das Figueiras</option><option>São Miguel Arcanjo</option>
-                                        <option>Village dos Coqueiros</option><option>Malvinas</option>
-                                        <option>Sport Clube</option><option>Comum</option>
+
+                                        <option>Centro</option>
+                                        <option>Alto Extremoz</option>
+                                        <option>Central Parque I</option>
+                                        <option>Central Parque II</option>
+                                        <option>Central Parque III</option>
+                                        <option>Central Parque Clube</option>
+                                        <option>Jardins de Extremoz</option>
+                                        <option>Jardins de Extremoz II</option>
+                                        <option>Moinho dos Ventos</option>
+                                        <option>Nova Extremoz</option>
+                                        <option>Parque das Flores</option>
+                                        <option>Parque das Jaqueiras</option>
+                                        <option>Parque do Servidor</option>
+                                        <option>Portal do Sol</option>
+                                        <option>Quintas das Figueiras</option>
+                                        <option>São Miguel Arcanjo</option>
+                                        <option>Village dos Coqueiros</option>
+                                        <option>Malvinas</option>
+                                        <option>Sport Clube</option>
+                                        <option>Comum</option>
+
                                     </optgroup>
+
+
                                     <optgroup label="Comunidades e localidades">
-                                        <option>Campinas</option><option>Estivas</option><option>Araçá</option>
-                                        <option>Vila de Fátima</option><option>Capim</option><option>Barra do Rio</option>
-                                        <option>Boca da Ilha</option><option>Coqueirinhos</option><option>Grutas</option>
-                                        <option>Pedrinhas</option><option>Passagem da Vila</option>
+
+                                        <option>Campinas</option>
+                                        <option>Estivas</option>
+                                        <option>Araçá</option>
+                                        <option>Vila de Fátima</option>
+                                        <option>Capim</option>
+                                        <option>Barra do Rio</option>
+                                        <option>Boca da Ilha</option>
+                                        <option>Coqueirinhos</option>
+                                        <option>Grutas</option>
+                                        <option>Pedrinhas</option>
+                                        <option>Passagem da Vila</option>
+
                                     </optgroup>
+
+
                                     <optgroup label="Praias e litoral">
-                                        <option>Genipabu</option><option>Pitangui</option><option>Santa Rita</option>
-                                        <option>Redinha Nova</option><option>Graçandu</option>
+
+                                        <option>Genipabu</option>
+                                        <option>Pitangui</option>
+                                        <option>Santa Rita</option>
+                                        <option>Redinha Nova</option>
+                                        <option>Graçandu</option>
+
                                     </optgroup>
+
+
                                     <optgroup label="Principais centros e referências">
-                                        <option>Centro de Extremoz</option>
-                                        <option>Centro Administrativo de Extremoz</option>
-                                        <option>Hospital Presidente Café Filho</option>
-                                        <option>Centro de Especialidades de Extremoz</option>
-                                        <option>Centro de Parto Normal de Extremoz</option>
-                                        <option>Centro Comercial</option>
+
+                                        <option>
+                                            Centro de Extremoz
+                                        </option>
+
+                                        <option>
+                                            Centro Administrativo de Extremoz
+                                        </option>
+
+                                        <option>
+                                            Hospital Presidente Café Filho
+                                        </option>
+
+                                        <option>
+                                            Centro de Especialidades de Extremoz
+                                        </option>
+
+                                        <option>
+                                            Centro de Parto Normal de Extremoz
+                                        </option>
+
+                                        <option>
+                                            Centro Comercial
+                                        </option>
+
                                     </optgroup>
-                                    <optgroup label="Outros"><option>Outro</option></optgroup>
+
+
+                                    <optgroup label="Outros">
+
+                                        <option>Outro</option>
+
+                                    </optgroup>
+
                                 </select>
+
                             </div>
 
                         </div>
 
+
                         <div class="form-group">
-                            <label for="reference">Ponto de referência</label>
-                            <input type="text" id="reference" placeholder="Ex.: próximo à praça, escola ou posto de saúde">
+
+                            <label for="reference">
+                                Ponto de referência
+                            </label>
+
+                            <input
+                                type="text"
+                                id="reference"
+                                placeholder="Ex.: próximo à praça, escola ou posto de saúde"
+                            >
+
                         </div>
+
 
                         <div class="form-row">
 
                             <div class="form-group">
-                                <label for="name">Nome *</label>
-                                <input type="text" id="name" placeholder="Seu nome" required>
+
+                                <label for="name">
+                                    Nome *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="name"
+                                    placeholder="Seu nome"
+                                    required
+                                >
+
                             </div>
 
+
                             <div class="form-group">
-                                <label for="email">E-mail *</label>
-                                <input type="email" id="email" placeholder="voce@email.com" required>
+
+                                <label for="email">
+                                    E-mail *
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    placeholder="voce@email.com"
+                                    required
+                                >
+
                             </div>
 
                         </div>
+
+
+                        <!-- Upload da foto -->
 
                         <div class="upload-area" id="uploadArea">
-                            <input type="file" id="image" accept="image/*" hidden>
+
+                            <input
+                                type="file"
+                                id="image"
+                                accept="image/*"
+                                hidden
+                            >
+
                             <div class="upload-icon">📷</div>
+
                             <strong>Adicionar uma foto</strong>
-                            <span>Clique para selecionar uma imagem do problema</span>
+
+                            <span>
+                                Clique para selecionar uma imagem do problema
+                            </span>
+
                             <small id="fileName"></small>
 
-                            <div id="imagePreview" class="image-preview" hidden>
-                                <img id="previewImage" src="" alt="Pré-visualização da foto">
+
+                            <div
+                                id="imagePreview"
+                                class="image-preview"
+                                hidden
+                            >
+
+                                <img
+                                    id="previewImage"
+                                    src=""
+                                    alt="Pré-visualização da foto"
+                                >
+
                             </div>
+
                         </div>
 
-                        <button class="btn btn-primary btn-large submit-btn" type="submit">
+
+                        <button
+                            class="btn btn-primary btn-large submit-btn"
+                            type="submit"
+                        >
+
                             Enviar solicitação
+
                             <span>→</span>
+
                         </button>
 
                     </form>
@@ -385,29 +607,50 @@
                 </div>
 
             </div>
+
         </section>
 
 
-        <!--onde acompanhar --->
+        <!-- Acompanhamento -->
 
-        <section class="section tracking-section" id="acompanhar">
+        <section
+            class="section tracking-section"
+            id="acompanhar"
+        >
+
             <div class="container">
 
                 <div class="section-heading centered">
-                    <span class="section-label">ACOMPANHAMENTO</span>
-                    <h2>Onde está sua solicitação?</h2>
+
+                    <span class="section-label">
+                        ACOMPANHAMENTO
+                    </span>
+
+                    <h2>
+                        Onde está sua solicitação?
+                    </h2>
+
                     <p>
                         Digite o número do protocolo para consultar o andamento.
                     </p>
+
                 </div>
+
 
                 <div class="tracking-box">
 
                     <div class="tracking-search">
 
-                        <input type="text" id="protocolInput" placeholder="Ex.: 2026-004821">
+                        <input
+                            type="text"
+                            id="protocolInput"
+                            placeholder="Ex.: 2026-004821"
+                        >
 
-                        <button class="btn btn-primary" id="searchProtocol">
+                        <button
+                            class="btn btn-primary"
+                            id="searchProtocol"
+                        >
                             Consultar
                         </button>
 
@@ -418,111 +661,206 @@
                 </div>
 
             </div>
+
         </section>
 
 
-        <!-- mapa -->
+        <!-- Mapa -->
 
-        <section class="section map-section" id="mapa">
+        <section
+            class="section map-section"
+            id="mapa"
+        >
+
             <div class="container">
 
                 <div class="section-heading">
 
                     <div>
-                        <span class="section-label">MAPA</span>
-                        <h2>Problemas na cidade</h2>
+
+                        <span class="section-label">
+                            MAPA
+                        </span>
+
+                        <h2>
+                            Problemas na cidade
+                        </h2>
+
                     </div>
 
+
                     <div class="map-filters">
-                        <button class="filter-btn active" data-filter="all">Todos</button>
-                        <button class="filter-btn" data-filter="Buracos e vias">Buracos</button>
-                        <button class="filter-btn" data-filter="Iluminação pública">Iluminação</button>
-                        <button class="filter-btn" data-filter="Limpeza urbana">Limpeza</button>
-                        <button class="filter-btn" data-filter="resolved">Resolvidos</button>
+
+                        <button
+                            class="filter-btn active"
+                            data-filter="all"
+                        >
+                            Todos
+                        </button>
+
+                        <button
+                            class="filter-btn"
+                            data-filter="Buracos e vias"
+                        >
+                            Buracos
+                        </button>
+
+                        <button
+                            class="filter-btn"
+                            data-filter="Iluminação pública"
+                        >
+                            Iluminação
+                        </button>
+
+                        <button
+                            class="filter-btn"
+                            data-filter="Limpeza urbana"
+                        >
+                            Limpeza
+                        </button>
+
+                        <button
+                            class="filter-btn"
+                            data-filter="resolved"
+                        >
+                            Resolvidos
+                        </button>
+
                     </div>
 
                 </div>
 
+
                 <div class="map-container">
 
-    <!-- Mapa real jv -->
-    <div id="realMap"></div>
+                    <!-- Mapa real -->
 
-    <div class="map-legend">
+                    <div id="realMap"></div>
 
-        <strong>Ocorrências</strong>
 
-        <span>
-            <i class="legend-dot red"></i>
-            Em aberto
-        </span>
+                    <div class="map-legend">
 
-        <span>
-            <i class="legend-dot yellow"></i>
-            Em atendimento
-        </span>
+                        <strong>Ocorrências</strong>
 
-        <span>
-            <i class="legend-dot green"></i>
-            Resolvido
-        </span>
+                        <span>
+                            <i class="legend-dot red"></i>
+                            Em aberto
+                        </span>
 
-    </div>
+                        <span>
+                            <i class="legend-dot yellow"></i>
+                            Em atendimento
+                        </span>
 
-</div>
+                        <span>
+                            <i class="legend-dot green"></i>
+                            Resolvido
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </section>
 
 
-        <!--acompanhar solicitações -->
+        <!-- Solicitações -->
 
         <section class="section requests-section">
+
             <div class="container">
 
                 <div class="section-heading">
+
                     <div>
-                        <span class="section-label">TRANSPARÊNCIA</span>
-                        <h2>Solicitações recentes</h2>
+
+                        <span class="section-label">
+                            TRANSPARÊNCIA
+                        </span>
+
+                        <h2>
+                            Solicitações recentes
+                        </h2>
+
                     </div>
 
                     <p>
                         Acompanhe as demandas registradas pela população.
                     </p>
+
                 </div>
+
 
                 <div class="requests-toolbar">
 
                     <div class="search-box">
+
                         🔎
-                        <input type="text" id="requestSearch" placeholder="Pesquisar solicitação...">
+
+                        <input
+                            type="text"
+                            id="requestSearch"
+                            placeholder="Pesquisar solicitação..."
+                        >
+
                     </div>
 
+
                     <select id="statusFilter">
-                        <option value="all">Todos os status</option>
-                        <option value="Resolvido">Resolvidos</option>
-                        <option value="Em atendimento">Em atendimento</option>
-                        <option value="Em análise">Em análise</option>
-                        <option value="Aguardando">Aguardando</option>
+
+                        <option value="all">
+                            Todos os status
+                        </option>
+
+                        <option value="Resolvido">
+                            Resolvidos
+                        </option>
+
+                        <option value="Em atendimento">
+                            Em atendimento
+                        </option>
+
+                        <option value="Em análise">
+                            Em análise
+                        </option>
+
+                        <option value="Aguardando">
+                            Aguardando
+                        </option>
+
                     </select>
 
+
                     <select id="categoryFilter">
-                        <option value="all">Todas as categorias</option>
+
+                        <option value="all">
+                            Todas as categorias
+                        </option>
+
                     </select>
 
                 </div>
+
 
                 <div class="requests-table-wrapper">
 
                     <table class="requests-table">
 
                         <thead>
+
                             <tr>
+
                                 <th>Protocolo</th>
                                 <th>Problema</th>
                                 <th>Categoria</th>
                                 <th>Bairro</th>
                                 <th>Data</th>
                                 <th>Status</th>
+
                             </tr>
+
                         </thead>
 
                         <tbody id="requestsTable"></tbody>
@@ -532,50 +870,87 @@
                 </div>
 
             </div>
+
         </section>
 
 
-        <!--transparencia ao publico-->
+        <!-- Transparência -->
 
-        <section class="section transparency-section" id="transparencia">
+        <section
+            class="section transparency-section"
+            id="transparencia"
+        >
 
             <div class="container">
 
                 <div class="section-heading centered">
-                    <span class="section-label">DADOS ABERTOS</span>
-                    <h2>Transparência em números</h2>
+
+                    <span class="section-label">
+                        DADOS ABERTOS
+                    </span>
+
+                    <h2>
+                        Transparência em números
+                    </h2>
+
                     <p>
                         Informações públicas sobre o atendimento das solicitações.
                     </p>
+
                 </div>
+
 
                 <div class="charts-grid">
 
                     <div class="chart-card">
 
                         <div class="chart-header">
+
                             <div>
-                                <strong>Solicitações por categoria</strong>
-                                <small>Últimos 30 dias</small>
+
+                                <strong>
+                                    Solicitações por categoria
+                                </strong>
+
+                                <small>
+                                    Últimos 30 dias
+                                </small>
+
                             </div>
+
                         </div>
 
-                        <div class="bars" id="categoryChart"></div>
+                        <div
+                            class="bars"
+                            id="categoryChart"
+                        ></div>
 
                     </div>
+
 
                     <div class="chart-card">
 
                         <div class="chart-header">
+
                             <div>
-                                <strong>Evolução mensal</strong>
-                                <small>Solicitações registradas</small>
+
+                                <strong>
+                                    Evolução mensal
+                                </strong>
+
+                                <small>
+                                    Solicitações registradas
+                                </small>
+
                             </div>
+
                         </div>
+
 
                         <div class="line-chart">
 
                             <div class="line-bars">
+
                                 <span style="height: 45%"></span>
                                 <span style="height: 58%"></span>
                                 <span style="height: 52%"></span>
@@ -583,9 +958,12 @@
                                 <span style="height: 64%"></span>
                                 <span style="height: 88%"></span>
                                 <span style="height: 78%"></span>
+
                             </div>
 
+
                             <div class="chart-labels">
+
                                 <span>Mar</span>
                                 <span>Abr</span>
                                 <span>Mai</span>
@@ -593,6 +971,7 @@
                                 <span>Jul</span>
                                 <span>Ago</span>
                                 <span>Set</span>
+
                             </div>
 
                         </div>
@@ -608,7 +987,7 @@
     </main>
 
 
-    <!--rodape-->
+    <!-- Rodapé -->
 
     <footer class="footer">
 
@@ -616,16 +995,25 @@
 
             <div class="footer-brand">
 
-                <div class="logo">
-                    <span class="logo-icon">CA</span>
+                <!-- Logo no rodapé -->
 
-                    <div class="logo-text">
-                        <strong>Cidade Ativa</strong>
-                        <span>Prefeitura Municipal</span>
-                    </div>
-                </div>
+                <a
+                    href="index.html"
+                    class="logo footer-logo"
+                    aria-label="Cidade Ativa"
+                >
 
-                <p>Sua denúncia, nossa ação.</p>
+                    <img
+                        src="images/logo.png"
+                        alt="Cidade Ativa - Prefeitura Municipal de Extremoz"
+                        class="logo-image"
+                    >
+
+                </a>
+
+                <p>
+                    Sua denúncia, nossa ação.
+                </p>
 
             </div>
 
@@ -633,7 +1021,11 @@
 
     </footer>
 
+
+    <!-- Scripts -->
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script src="script.js"></script>
 
 </body>
