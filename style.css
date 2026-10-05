@@ -1899,3 +1899,54 @@ body.dark-mode .stat-icon.progress {
 body.dark-mode .stat-icon.waiting {
   color: #C9A7FF;
 }
+
+/*logo*/
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo img {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    display: block;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-text strong {
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.logo-text span {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/*logo vista pelo celular*/
+
+@media (max-width: 768px) {
+    .logo img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .logo-text strong {
+        font-size: 1.05rem;
+    }
+
+    .logo-text span {
+        font-size: 0.65rem;
+    }
+}
