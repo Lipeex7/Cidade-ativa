@@ -1,42 +1,17 @@
-// Rola a página até uma seção
-function scrollToSection(sectionId) {
-    const section = document.getElementById(sectionId);
+/* ========================================
+   CIDADE ATIVA
+   Script principal
+======================================== */
 
-    if (section) {
-        section.scrollIntoView({
-            behavior: "smooth"
-        });
-    }
-}
 
-// Gera um número de protocolo
-function gerarProtocolo() {
-    const ano = new Date().getFullYear();
-    const numero = Math.floor(100000 + Math.random() * 900000);
+/* ========================================
+   CONFIGURAÇÕES
+======================================== */
 
-    return `${ano}-${numero}`;
-}
+const STORAGE_KEY = "cidadeAtiva_ocorrencias";
+const THEME_KEY = "tema";
 
-// Pega as ocorrências salvas
-function obterOcorrencias() {
-    const dados = localStorage.getItem("ocorrencias");
 
-    if (dados) {
-        return JSON.parse(dados);
-    }
-
-    return [];
-}
-
-// Salva as ocorrências
-function salvarOcorrencias(ocorrencias) {
-    localStorage.setItem(
-        "ocorrencias",
-        JSON.stringify(ocorrencias)
-    );
-}
-
-// Categorias
 const categorias = [
     "Buracos e vias",
     "Iluminação pública",
@@ -47,228 +22,1313 @@ const categorias = [
     "Outros"
 ];
 
-// Coloca as categorias no formulário
-const categorySelect = document.getElementById("category");
 
-if (categorySelect) {
-    categorias.forEach(function(categoria) {
-        const option = document.createElement("option");
+/* ========================================
+   FUNÇÕES GERAIS
+======================================== */
 
-        option.value = categoria;
-        option.textContent = categoria;
+// Rola até uma seção
+function scrollToSection(sectionId) {
 
-        categorySelect.appendChild(option);
+    const section = document.getElementById(sectionId);
+
+    if (section) {
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+
+// Gera protocolo
+function gerarProtocolo() {
+
+    const ano = new Date().getFullYear();
+
+    const numero = Math.floor(
+        100000 + Math.random() * 900000
+    );
+
+    return `${ano}-${numero}`;
+}
+
+
+// Obtém ocorrências
+function obterOcorrencias() {
+
+    try {
+
+        const dados = localStorage.getItem(STORAGE_KEY);
+
+        if (!dados) {
+            return [];
+        }
+
+        const ocorrencias = JSON.parse(dados);
+
+        return Array.isArray(ocorrencias)
+            ? ocorrencias
+            : [];
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar ocorrências:",
+            erro
+        );
+
+        return [];
+    }
+}
+
+
+// Salva ocorrências
+function salvarOcorrencias(ocorrencias) {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(ocorrencias)
+    );
+}
+
+
+// Escapa texto para evitar HTML indevido
+function escaparHTML(texto) {
+
+    if (texto === null || texto === undefined) {
+        return "";
+    }
+
+    return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* ========================================
+   MENU MOBILE
+======================================== */
+
+const menuBtn = document.querySelector(".menu-btn");
+const nav = document.querySelector(".nav");
+
+if (menuBtn && nav) {
+
+    menuBtn.addEventListener("click", function () {
+
+        nav.classList.toggle("is-open");
+
+        const aberto = nav.classList.contains("is-open");
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            aberto ? "true" : "false"
+        );
+
+    });
+
+
+    // Fecha o menu ao clicar em um link
+    nav.querySelectorAll("a").forEach(function (link) {
+
+        link.addEventListener("click", function () {
+
+            nav.classList.remove("is-open");
+
+            menuBtn.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        });
+
     });
 }
 
-// Formulário de registro
-const reportForm = document.getElementById("reportForm");
+
+/* ========================================
+   BOTÕES "REGISTRAR PROBLEMA"
+======================================== */
+
+document.querySelectorAll("a, button").forEach(function (elemento) {
+
+    const texto = elemento.textContent
+        .trim()
+        .toLowerCase();
+
+    if (texto.includes("registrar um problema")) {
+
+        elemento.addEventListener("click", function (event) {
+
+            const destino = document.getElementById("registrar");
+
+            if (destino) {
+
+                event.preventDefault();
+
+                scrollToSection("registrar");
+
+            }
+
+        });
+
+    }
+
+});
+
+
+/* ========================================
+   CATEGORIAS DO FORMULÁRIO
+======================================== */
+
+const categorySelect =
+    document.getElementById("category");
+
+if (categorySelect) {
+
+    // Evita duplicar categorias
+    if (categorySelect.options.length <= 1) {
+
+        categorias.forEach(function (categoria) {
+
+            const option =
+                document.createElement("option");
+
+            option.value = categoria;
+            option.textContent = categoria;
+
+            categorySelect.appendChild(option);
+
+        });
+
+    }
+}
+
+
+/* ========================================
+   UPLOAD E PRÉ-VISUALIZAÇÃO DA FOTO
+======================================== */
+
+const uploadArea =
+    document.getElementById("uploadArea");
+
+const imageInput =
+    document.getElementById("image");
+
+const fileName =
+    document.getElementById("fileName");
+
+const imagePreview =
+    document.getElementById("cidadeAtivaImagePreview");
+
+const previewImage =
+    document.getElementById("cidadeAtivaPreviewImage");
+
+
+if (uploadArea && imageInput) {
+
+    uploadArea.addEventListener(
+        "click",
+        function () {
+
+            imageInput.click();
+
+        }
+    );
+
+
+    imageInput.addEventListener(
+        "change",
+        function () {
+
+            const arquivo = this.files[0];
+
+            if (!arquivo) {
+
+                if (fileName) {
+                    fileName.textContent = "";
+                }
+
+                if (imagePreview) {
+                    imagePreview.hidden = true;
+                }
+
+                if (previewImage) {
+                    previewImage.src = "";
+                }
+
+                return;
+            }
+
+
+            // Verifica se é imagem
+            if (!arquivo.type.startsWith("image/")) {
+
+                alert(
+                    "Selecione um arquivo de imagem."
+                );
+
+                this.value = "";
+
+                return;
+            }
+
+
+            if (fileName) {
+                fileName.textContent =
+                    arquivo.name;
+            }
+
+
+            const leitor =
+                new FileReader();
+
+
+            leitor.onload =
+                function (evento) {
+
+                    if (previewImage) {
+
+                        previewImage.src =
+                            evento.target.result;
+
+                    }
+
+                    if (imagePreview) {
+
+                        imagePreview.hidden =
+                            false;
+
+                    }
+
+                };
+
+
+            leitor.readAsDataURL(arquivo);
+
+        }
+    );
+
+}
+
+
+/* ========================================
+   REGISTRO DE OCORRÊNCIA
+======================================== */
+
+const reportForm =
+    document.getElementById("reportForm");
+
 
 if (reportForm) {
 
-    reportForm.addEventListener("submit", function(event) {
+    reportForm.addEventListener(
+        "submit",
+        async function (event) {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        // Pega os dados do formulário
-        const categoria = document.getElementById("category").value;
-        const titulo = document.getElementById("title").value;
-        const descricao = document.getElementById("description").value;
-        const endereco = document.getElementById("address").value;
-        const bairro = document.getElementById("neighborhood").value;
-        const nome = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
 
-        // Cria o protocolo
-        const protocolo = gerarProtocolo();
+            /* ----------------------------
+               CAMPOS
+            ---------------------------- */
 
-        // Cria a ocorrência
-        const ocorrencia = {
-            protocolo: protocolo,
-            categoria: categoria,
-            titulo: titulo,
-            descricao: descricao,
-            endereco: endereco,
-            bairro: bairro,
-            nome: nome,
-            email: email,
-            data: new Date().toLocaleDateString("pt-BR"),
-            status: "Em análise"
-        };
+            const categoria =
+                document.getElementById(
+                    "category"
+                )?.value.trim();
 
-        // Pega as ocorrências existentes
-        const ocorrencias = obterOcorrencias();
 
-        // Adiciona a nova ocorrência
-        ocorrencias.push(ocorrencia);
+            const titulo =
+                document.getElementById(
+                    "title"
+                )?.value.trim();
 
-        // Salva
-        salvarOcorrencias(ocorrencias);
 
-        // Limpa o formulário
-        reportForm.reset();
+            const descricao =
+                document.getElementById(
+                    "description"
+                )?.value.trim();
 
-        // Mostra o protocolo
-        alert(
-            "Solicitação registrada com sucesso!\n\n" +
-            "Seu protocolo é: " + protocolo
-        );
 
-        // Vai para a área de acompanhamento
-        scrollToSection("acompanhar");
+            const endereco =
+                document.getElementById(
+                    "address"
+                )?.value.trim();
 
-        // Coloca o protocolo no campo
-        const protocolInput = document.getElementById("protocolInput");
 
-        if (protocolInput) {
-            protocolInput.value = protocolo;
+            const bairro =
+                document.getElementById(
+                    "neighborhood"
+                )?.value.trim();
+
+
+            const referencia =
+                document.getElementById(
+                    "reference"
+                )?.value.trim() || "";
+
+
+            const nome =
+                document.getElementById(
+                    "name"
+                )?.value.trim();
+
+
+            const email =
+                document.getElementById(
+                    "email"
+                )?.value.trim();
+
+
+            /* ----------------------------
+               VALIDAÇÃO
+            ---------------------------- */
+
+            if (
+                !categoria ||
+                !titulo ||
+                !descricao ||
+                !endereco ||
+                !bairro
+            ) {
+
+                alert(
+                    "Preencha todos os campos obrigatórios."
+                );
+
+                return;
+            }
+
+
+            /* ----------------------------
+               PROTOCOLO
+            ---------------------------- */
+
+            const protocolo =
+                gerarProtocolo();
+
+
+            /* ----------------------------
+               DATA
+            ---------------------------- */
+
+            const agora =
+                new Date();
+
+
+            const data =
+                agora.toLocaleDateString(
+                    "pt-BR"
+                );
+
+
+            const hora =
+                agora.toLocaleTimeString(
+                    "pt-BR",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+
+            /* ----------------------------
+               FOTO
+            ---------------------------- */
+
+            let foto = "";
+
+
+            if (
+                imageInput &&
+                imageInput.files &&
+                imageInput.files[0]
+            ) {
+
+                const arquivo =
+                    imageInput.files[0];
+
+
+                // Limite aproximado de 2 MB
+                if (
+                    arquivo.size >
+                    2 * 1024 * 1024
+                ) {
+
+                    alert(
+                        "A foto deve ter no máximo 2 MB."
+                    );
+
+                    return;
+                }
+
+
+                foto =
+                    await converterImagemParaBase64(
+                        arquivo
+                    );
+
+            }
+
+
+            /* ----------------------------
+               OCORRÊNCIA
+            ---------------------------- */
+
+            const ocorrencia = {
+
+                protocolo: protocolo,
+
+                categoria: categoria,
+
+                titulo: titulo,
+
+                descricao: descricao,
+
+                endereco: endereco,
+
+                bairro: bairro,
+
+                referencia: referencia,
+
+                nome: nome || "Cidadão",
+
+                email: email || "",
+
+                data: data,
+
+                hora: hora,
+
+                status: "Em análise",
+
+                foto: foto,
+
+                latitude: null,
+
+                longitude: null
+
+            };
+
+
+            /* ----------------------------
+               SALVA
+            ---------------------------- */
+
+            const ocorrencias =
+                obterOcorrencias();
+
+
+            ocorrencias.push(
+                ocorrencia
+            );
+
+
+            salvarOcorrencias(
+                ocorrencias
+            );
+
+
+            /* ----------------------------
+               ATUALIZA SITE
+            ---------------------------- */
+
+            atualizarTabelaOcorrencias();
+
+            atualizarMapaCidade();
+
+            atualizarMapaInferior();
+
+
+            /* ----------------------------
+               LIMPA FORMULÁRIO
+            ---------------------------- */
+
+            reportForm.reset();
+
+
+            if (fileName) {
+                fileName.textContent = "";
+            }
+
+
+            if (imagePreview) {
+                imagePreview.hidden = true;
+            }
+
+
+            if (previewImage) {
+                previewImage.src = "";
+            }
+
+
+            /* ----------------------------
+               MOSTRA PROTOCOLO
+            ---------------------------- */
+
+            alert(
+                "Solicitação registrada com sucesso!\n\n" +
+                "Seu protocolo é:\n" +
+                protocolo +
+                "\n\nGuarde esse número para acompanhar sua solicitação."
+            );
+
+
+            /* ----------------------------
+               ACOMPANHAMENTO
+            ---------------------------- */
+
+            const protocolInput =
+                document.getElementById(
+                    "protocolInput"
+                );
+
+
+            if (protocolInput) {
+
+                protocolInput.value =
+                    protocolo;
+
+            }
+
+
+            scrollToSection(
+                "acompanhar"
+            );
+
+
+            /* ----------------------------
+               MOSTRA AUTOMATICAMENTE
+            ---------------------------- */
+
+            setTimeout(function () {
+
+                consultarProtocolo(
+                    protocolo
+                );
+
+            }, 500);
+
         }
-    });
+    );
+
 }
 
-// Botão de consultar protocolo
-const searchProtocol = document.getElementById("searchProtocol");
+
+/* ========================================
+   CONVERTER FOTO
+======================================== */
+
+function converterImagemParaBase64(
+    arquivo
+) {
+
+    return new Promise(
+        function (resolve, reject) {
+
+            const leitor =
+                new FileReader();
+
+
+            leitor.onload =
+                function () {
+
+                    resolve(
+                        leitor.result
+                    );
+
+                };
+
+
+            leitor.onerror =
+                function () {
+
+                    reject(
+                        leitor.error
+                    );
+
+                };
+
+
+            leitor.readAsDataURL(
+                arquivo
+            );
+
+        }
+    );
+
+}
+
+
+/* ========================================
+   ACOMPANHAMENTO DE PROTOCOLO
+======================================== */
+
+const searchProtocol =
+    document.getElementById(
+        "searchProtocol"
+    );
+
 
 if (searchProtocol) {
 
-    searchProtocol.addEventListener("click", function() {
+    searchProtocol.addEventListener(
+        "click",
+        function () {
 
-        const input = document.getElementById("protocolInput");
-        const resultado = document.getElementById("trackingResult");
+            const input =
+                document.getElementById(
+                    "protocolInput"
+                );
 
-        const protocolo = input.value.trim();
 
-        // Verifica se o campo está vazio
-        if (!protocolo) {
-            resultado.innerHTML = `
-                <p>Digite um número de protocolo.</p>
-            `;
+            if (!input) {
+                return;
+            }
 
-            return;
+
+            const protocolo =
+                input.value.trim();
+
+
+            consultarProtocolo(
+                protocolo
+            );
+
         }
+    );
 
-        // Procura a ocorrência
-        const ocorrencias = obterOcorrencias();
+}
 
-        const ocorrencia = ocorrencias.find(function(item) {
-            return item.protocolo === protocolo;
-        });
 
-        // Se não encontrar
-        if (!ocorrencia) {
-            resultado.innerHTML = `
-                <p>Protocolo não encontrado.</p>
-            `;
+/* Permite apertar Enter no protocolo */
 
-            return;
+const protocolInput =
+    document.getElementById(
+        "protocolInput"
+    );
+
+
+if (protocolInput) {
+
+    protocolInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                consultarProtocolo(
+                    this.value.trim()
+                );
+
+            }
+
         }
+    );
 
-        // Mostra os dados da ocorrência
+}
+
+
+/* Consulta protocolo */
+
+function consultarProtocolo(
+    protocolo
+) {
+
+    const resultado =
+        document.getElementById(
+            "trackingResult"
+        );
+
+
+    if (!resultado) {
+        return;
+    }
+
+
+    if (!protocolo) {
+
         resultado.innerHTML = `
             <div class="tracking-result-card">
+                <strong>Digite um número de protocolo.</strong>
+                <p>
+                    Exemplo: 2026-123456
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const ocorrencias =
+        obterOcorrencias();
+
+
+    const ocorrencia =
+        ocorrencias.find(
+            function (item) {
+
+                return (
+                    item.protocolo
+                        .toLowerCase() ===
+                    protocolo.toLowerCase()
+                );
+
+            }
+        );
+
+
+    if (!ocorrencia) {
+
+        resultado.innerHTML = `
+            <div class="tracking-result-card">
+                <strong>Protocolo não encontrado.</strong>
+                <p>
+                    Confira o número informado e tente novamente.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    let classeStatus = "";
+
+
+    if (
+        ocorrencia.status ===
+        "Resolvido"
+    ) {
+
+        classeStatus =
+            "resolvido";
+
+    } else if (
+        ocorrencia.status ===
+            "Em andamento" ||
+        ocorrencia.status ===
+            "Em atendimento"
+    ) {
+
+        classeStatus =
+            "andamento";
+
+    }
+
+
+    resultado.innerHTML = `
+
+        <div class="tracking-result-card">
+
+            <header>
 
                 <div>
                     <strong>Protocolo</strong>
-                    <p>${ocorrencia.protocolo}</p>
+
+                    <p class="ticket-id">
+                        ${escaparHTML(
+                            ocorrencia.protocolo
+                        )}
+                    </p>
                 </div>
 
-                <div>
-                    <strong>Problema</strong>
-                    <p>${ocorrencia.titulo}</p>
-                </div>
+                <span class="ticket-status ${classeStatus}">
+                    ${escaparHTML(
+                        ocorrencia.status
+                    )}
+                </span>
 
-                <div>
-                    <strong>Categoria</strong>
-                    <p>${ocorrencia.categoria}</p>
-                </div>
+            </header>
 
-                <div>
-                    <strong>Bairro</strong>
-                    <p>${ocorrencia.bairro}</p>
-                </div>
 
-                <div>
-                    <strong>Data</strong>
-                    <p>${ocorrencia.data}</p>
-                </div>
-
-                <div>
-                    <strong>Status</strong>
-                    <p>${ocorrencia.status}</p>
-                </div>
-
-                <div>
-                    <strong>Descrição</strong>
-                    <p>${ocorrencia.descricao}</p>
-                </div>
-
+            <div>
+                <strong>Problema</strong>
+                <p>
+                    ${escaparHTML(
+                        ocorrencia.titulo
+                    )}
+                </p>
             </div>
-        `;
-    });
+
+
+            <div>
+                <strong>Categoria</strong>
+                <p>
+                    ${escaparHTML(
+                        ocorrencia.categoria
+                    )}
+                </p>
+            </div>
+
+
+            <div>
+                <strong>Local</strong>
+                <p>
+                    ${escaparHTML(
+                        ocorrencia.endereco
+                    )}
+                </p>
+            </div>
+
+
+            <div>
+                <strong>Bairro</strong>
+                <p>
+                    ${escaparHTML(
+                        ocorrencia.bairro
+                    )}
+                </p>
+            </div>
+
+
+            ${
+                ocorrencia.referencia
+                    ? `
+                    <div>
+                        <strong>
+                            Ponto de referência
+                        </strong>
+                        <p>
+                            ${escaparHTML(
+                                ocorrencia.referencia
+                            )}
+                        </p>
+                    </div>
+                    `
+                    : ""
+            }
+
+
+            <div>
+                <strong>Data</strong>
+                <p>
+                    ${escaparHTML(
+                        ocorrencia.data
+                    )}
+                    ${
+                        ocorrencia.hora
+                            ? " às " +
+                              escaparHTML(
+                                  ocorrencia.hora
+                              )
+                            : ""
+                    }
+                </p>
+            </div>
+
+
+            <div>
+                <strong>Descrição</strong>
+                <p>
+                    ${escaparHTML(
+                        ocorrencia.descricao
+                    )}
+                </p>
+            </div>
+
+
+            ${
+                ocorrencia.foto
+                    ? `
+                    <div>
+                        <strong>Foto enviada</strong>
+
+                        <img
+                            src="${ocorrencia.foto}"
+                            alt="Foto da ocorrência"
+                            style="
+                                width:100%;
+                                max-width:360px;
+                                margin-top:10px;
+                                border-radius:12px;
+                            "
+                        >
+                    </div>
+                    `
+                    : ""
+            }
+
+        </div>
+
+    `;
 }
 
-// Botão de modo escuro
-const themeToggle = document.getElementById("themeToggle");
 
-// Verifica se o usuário já escolheu um tema
-const temaSalvo = localStorage.getItem("tema");
+/* ========================================
+   MODO ESCURO
+======================================== */
 
-if (temaSalvo === "dark") {
-    document.body.classList.add("dark-mode");
-    themeToggle.textContent = "☀️";
-}
-
-// Alterna entre claro e escuro
-if (themeToggle) {
-
-    themeToggle.addEventListener("click", function() {
-
-        document.body.classList.toggle("dark-mode");
-
-        // Verifica qual tema está ativo
-        const modoEscuro = document.body.classList.contains("dark-mode");
-
-        if (modoEscuro) {
-            themeToggle.textContent = "☀️";
-            localStorage.setItem("tema", "dark");
-        } else {
-            themeToggle.textContent = "🌙";
-            localStorage.setItem("tema", "light");
-        }
-
-    });
-
-}
-
-// ========================================
-// MAPA REAL DE EXTREMOZ
-// ========================================
-
-const mapa = document.getElementById("realMap");
-
-if (mapa) {
-
-    // Coordenadas aproximadas do centro de Extremoz
-    const latitude = -5.706;
-    const longitude = -35.307;
-
-    // Cria o mapa
-    const map = L.map("realMap").setView(
-        [latitude, longitude],
-        13
+const themeToggle =
+    document.getElementById(
+        "themeToggle"
     );
 
-    // Adiciona o mapa do OpenStreetMap
+
+function atualizarIconeTema() {
+
+    if (!themeToggle) {
+        return;
+    }
+
+
+    const modoEscuro =
+        document.body.classList.contains(
+            "dark-mode"
+        );
+
+
+    themeToggle.textContent =
+        modoEscuro
+            ? "☀️"
+            : "🌙";
+
+}
+
+
+const temaSalvo =
+    localStorage.getItem(
+        THEME_KEY
+    );
+
+
+if (temaSalvo === "dark") {
+
+    document.body.classList.add(
+        "dark-mode"
+    );
+
+}
+
+
+atualizarIconeTema();
+
+
+if (themeToggle) {
+
+    themeToggle.addEventListener(
+        "click",
+        function () {
+
+            document.body.classList.toggle(
+                "dark-mode"
+            );
+
+
+            const modoEscuro =
+                document.body.classList.contains(
+                    "dark-mode"
+                );
+
+
+            localStorage.setItem(
+                THEME_KEY,
+                modoEscuro
+                    ? "dark"
+                    : "light"
+            );
+
+
+            atualizarIconeTema();
+
+        }
+    );
+
+}
+
+
+/* ========================================
+   MAPA SUPERIOR - CITY MAP
+======================================== */
+
+let cityMap = null;
+let cityMarkers = [];
+
+
+function inicializarMapaCidade() {
+
+    const elemento =
+        document.getElementById(
+            "cityMap"
+        );
+
+
+    if (
+        !elemento ||
+        typeof L === "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    if (cityMap) {
+        return;
+    }
+
+
+    cityMap =
+        L.map(
+            "cityMap",
+            {
+                zoomControl: false,
+                attributionControl: true
+            }
+        ).setView(
+            [-5.706, -35.307],
+            13
+        );
+
+
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
+            maxZoom: 19,
             attribution:
-                '&copy; OpenStreetMap contributors',
-            maxZoom: 19
+                "&copy; OpenStreetMap contributors"
         }
-    ).addTo(map);
+    ).addTo(cityMap);
 
-    // Ocorrências de exemplo
+
+    atualizarMapaCidade();
+
+
+    setTimeout(function () {
+
+        cityMap.invalidateSize();
+
+    }, 300);
+
+}
+
+
+/* Atualiza mapa superior */
+
+function atualizarMapaCidade() {
+
+    if (!cityMap) {
+        return;
+    }
+
+
+    cityMarkers.forEach(
+        function (marker) {
+
+            cityMap.removeLayer(
+                marker
+            );
+
+        }
+    );
+
+
+    cityMarkers = [];
+
+
+    const ocorrencias =
+        obterOcorrencias();
+
+
+    ocorrencias.forEach(
+        function (ocorrencia) {
+
+            if (
+                ocorrencia.latitude === null ||
+                ocorrencia.longitude === null
+            ) {
+
+                return;
+
+            }
+
+
+            const cor =
+                obterCorStatus(
+                    ocorrencia.status
+                );
+
+
+            const marcador =
+                L.circleMarker(
+                    [
+                        ocorrencia.latitude,
+                        ocorrencia.longitude
+                    ],
+                    {
+                        radius: 7,
+                        color: "#ffffff",
+                        weight: 2,
+                        fillColor: cor,
+                        fillOpacity: 0.9
+                    }
+                );
+
+
+            marcador.bindPopup(`
+
+                <strong>
+                    ${escaparHTML(
+                        ocorrencia.titulo
+                    )}
+                </strong>
+
+                <br>
+
+                ${escaparHTML(
+                    ocorrencia.categoria
+                )}
+
+                <br>
+
+                ${escaparHTML(
+                    ocorrencia.bairro
+                )}
+
+                <br><br>
+
+                <strong>Status:</strong>
+                ${escaparHTML(
+                    ocorrencia.status
+                )}
+
+                <br>
+
+                <strong>Protocolo:</strong>
+                ${escaparHTML(
+                    ocorrencia.protocolo
+                )}
+
+            `);
+
+
+            marcador.addTo(
+                cityMap
+            );
+
+
+            cityMarkers.push(
+                marcador
+            );
+
+        }
+    );
+
+}
+
+
+/* Cor do marcador */
+
+function obterCorStatus(
+    status
+) {
+
+    if (
+        status === "Resolvido"
+    ) {
+
+        return "#2E8B57";
+
+    }
+
+
+    if (
+        status === "Em atendimento" ||
+        status === "Em andamento"
+    ) {
+
+        return "#F4C430";
+
+    }
+
+
+    return "#DC3545";
+}
+
+
+/* ========================================
+   MAPA REAL - REAL MAP
+======================================== */
+
+let realMap = null;
+
+
+function inicializarMapaReal() {
+
+    const elemento =
+        document.getElementById(
+            "realMap"
+        );
+
+
+    if (
+        !elemento ||
+        typeof L === "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    if (realMap) {
+        return;
+    }
+
+
+    realMap =
+        L.map(
+            "realMap"
+        ).setView(
+            [-5.706, -35.307],
+            13
+        );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(realMap);
+
+
+    adicionarPontosExemplo(
+        realMap
+    );
+
+
+    adicionarOcorrenciasAoMapa(
+        realMap
+    );
+
+
+    setTimeout(function () {
+
+        realMap.invalidateSize();
+
+    }, 300);
+
+}
+
+
+/* Pontos demonstrativos */
+
+function adicionarPontosExemplo(
+    mapa
+) {
+
     const pontos = [
 
         {
@@ -297,138 +1357,587 @@ if (mapa) {
 
     ];
 
-    // Cria os pontos no mapa
-    pontos.forEach(function(ponto) {
 
-        let cor = "red";
+    pontos.forEach(
+        function (ponto) {
 
-        if (ponto.status === "Em atendimento") {
-            cor = "orange";
+            const marcador =
+                L.circleMarker(
+                    [
+                        ponto.latitude,
+                        ponto.longitude
+                    ],
+                    {
+                        radius: 9,
+                        color: "#ffffff",
+                        weight: 2,
+                        fillColor:
+                            obterCorStatus(
+                                ponto.status
+                            ),
+                        fillOpacity: 0.9
+                    }
+                );
+
+
+            marcador.bindPopup(`
+
+                <strong>
+                    ${escaparHTML(
+                        ponto.titulo
+                    )}
+                </strong>
+
+                <br>
+
+                ${escaparHTML(
+                    ponto.categoria
+                )}
+
+                <br>
+
+                <strong>Status:</strong>
+                ${escaparHTML(
+                    ponto.status
+                )}
+
+            `);
+
+
+            marcador.addTo(
+                mapa
+            );
+
         }
-
-        if (ponto.status === "Resolvido") {
-            cor = "green";
-        }
-
-        const marcador = L.circleMarker(
-            [ponto.latitude, ponto.longitude],
-            {
-                radius: 9,
-                color: "#ffffff",
-                weight: 2,
-                fillColor: cor,
-                fillOpacity: 0.9
-            }
-        );
-
-        marcador.bindPopup(`
-            <strong>${ponto.titulo}</strong>
-            <br>
-            <span>${ponto.categoria}</span>
-            <br>
-            <strong>Status:</strong> ${ponto.status}
-        `);
-
-        marcador.addTo(map);
-
-    });
+    );
 
 }
 
-// ==========================================
-// MAPA REAL - STATUS DA CIDADE
-// ==========================================
 
-const cityMapElement = document.getElementById("cityMap");
+/* Adiciona ocorrências reais ao mapa */
 
-if (cityMapElement && typeof L !== "undefined") {
+function adicionarOcorrenciasAoMapa(
+    mapa
+) {
 
-    // Centro de Extremoz/RN
-    const latitude = -5.706;
-    const longitude = -35.307;
-
-    const cityMap = L.map("cityMap", {
-        zoomControl: false,
-        attributionControl: true
-    }).setView([latitude, longitude], 13);
-
-    // OpenStreetMap
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap"
-    }).addTo(cityMap);
+    const ocorrencias =
+        obterOcorrencias();
 
 
-    // ==========================================
-    // PONTOS DE EXEMPLO
-    // ==========================================
+    ocorrencias.forEach(
+        function (ocorrencia) {
 
-    const pontosCidade = [
+            if (
+                ocorrencia.latitude === null ||
+                ocorrencia.longitude === null
+            ) {
 
-        {
-            latitude: -5.7043,
-            longitude: -35.3043,
-            titulo: "Buraco na via",
-            categoria: "Buracos e vias",
-            status: "Em aberto"
-        },
+                return;
 
-        {
-            latitude: -5.6995,
-            longitude: -35.3005,
-            titulo: "Problema na iluminação",
-            categoria: "Iluminação pública",
-            status: "Em atendimento"
-        },
+            }
 
-        {
-            latitude: -5.7105,
-            longitude: -35.3090,
-            titulo: "Limpeza urbana",
-            categoria: "Limpeza urbana",
-            status: "Resolvido"
+
+            const marcador =
+                L.circleMarker(
+                    [
+                        ocorrencia.latitude,
+                        ocorrencia.longitude
+                    ],
+                    {
+                        radius: 9,
+                        color: "#ffffff",
+                        weight: 2,
+                        fillColor:
+                            obterCorStatus(
+                                ocorrencia.status
+                            ),
+                        fillOpacity: 0.9
+                    }
+                );
+
+
+            marcador.bindPopup(`
+
+                <strong>
+                    ${escaparHTML(
+                        ocorrencia.titulo
+                    )}
+                </strong>
+
+                <br>
+
+                ${escaparHTML(
+                    ocorrencia.categoria
+                )}
+
+                <br>
+
+                <strong>Status:</strong>
+                ${escaparHTML(
+                    ocorrencia.status
+                )}
+
+                <br>
+
+                <strong>Protocolo:</strong>
+                ${escaparHTML(
+                    ocorrencia.protocolo
+                )}
+
+            `);
+
+
+            marcador.addTo(
+                mapa
+            );
+
         }
+    );
 
-    ];
+}
 
 
-    // ==========================================
-    // CRIA OS MARCADORES
-    // ==========================================
+/* ========================================
+   TABELA DE OCORRÊNCIAS
+======================================== */
 
-    pontosCidade.forEach(function(ponto) {
+function atualizarTabelaOcorrencias(
+    filtro = "todos"
+) {
 
-        let cor = "#DC3545";
+    const tbody =
+        document.querySelector(
+            ".requests-table tbody"
+        );
 
-        if (ponto.status === "Em atendimento") {
-            cor = "#F4C430";
-        }
 
-        if (ponto.status === "Resolvido") {
-            cor = "#2E8B57";
-        }
+    if (!tbody) {
+        return;
+    }
 
-        const marcador = L.circleMarker(
-            [ponto.latitude, ponto.longitude],
-            {
-                radius: 7,
-                color: "#ffffff",
-                weight: 2,
-                fillColor: cor,
-                fillOpacity: 1
+
+    let ocorrencias =
+        obterOcorrencias();
+
+
+    if (
+        filtro &&
+        filtro !== "todos" &&
+        filtro !== "all"
+    ) {
+
+        ocorrencias =
+            ocorrencias.filter(
+                function (item) {
+
+                    return (
+                        item.status ===
+                        filtro
+                    );
+
+                }
+            );
+
+    }
+
+
+    if (ocorrencias.length === 0) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="100%"
+                    style="text-align:center;padding:30px;"
+                >
+                    Nenhuma ocorrência registrada.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    ocorrencias
+        .slice()
+        .reverse()
+        .forEach(
+            function (ocorrencia) {
+
+                const tr =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                tr.innerHTML = `
+
+                    <td>
+                        ${escaparHTML(
+                            ocorrencia.protocolo
+                        )}
+                    </td>
+
+                    <td>
+                        ${escaparHTML(
+                            ocorrencia.titulo
+                        )}
+                    </td>
+
+                    <td>
+                        ${escaparHTML(
+                            ocorrencia.categoria
+                        )}
+                    </td>
+
+                    <td>
+                        ${escaparHTML(
+                            ocorrencia.bairro
+                        )}
+                    </td>
+
+                    <td>
+                        <span class="status-badge ${classeStatusTabela(
+                            ocorrencia.status
+                        )}">
+                            ${escaparHTML(
+                                ocorrencia.status
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${escaparHTML(
+                            ocorrencia.data
+                        )}
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(
+                    tr
+                );
+
             }
         );
 
-        marcador.bindPopup(`
-            <strong>${ponto.titulo}</strong>
-            <br>
-            ${ponto.categoria}
-            <br>
-            <strong>Status:</strong> ${ponto.status}
-        `);
+}
 
-        marcador.addTo(cityMap);
 
-    });
+/* Classe do status */
+
+function classeStatusTabela(
+    status
+) {
+
+    if (
+        status === "Resolvido"
+    ) {
+
+        return "resolvido";
+
+    }
+
+
+    if (
+        status === "Em andamento" ||
+        status === "Em atendimento"
+    ) {
+
+        return "atendimento";
+
+    }
+
+
+    if (
+        status === "Em análise"
+    ) {
+
+        return "analise";
+
+    }
+
+
+    return "aguardando";
+}
+
+
+/* ========================================
+   FILTROS
+======================================== */
+
+document
+    .querySelectorAll(
+        ".filter-btn"
+    )
+    .forEach(
+        function (botao) {
+
+            botao.addEventListener(
+                "click",
+                function () {
+
+                    document
+                        .querySelectorAll(
+                            ".filter-btn"
+                        )
+                        .forEach(
+                            function (item) {
+
+                                item.classList
+                                    .remove(
+                                        "active"
+                                    );
+
+                            }
+                        );
+
+
+                    botao.classList.add(
+                        "active"
+                    );
+
+
+                    const filtro =
+                        botao.dataset.filter;
+
+
+                    if (
+                        filtro === "resolved"
+                    ) {
+
+                        atualizarTabelaOcorrencias(
+                            "Resolvido"
+                        );
+
+                    } else if (
+                        filtro === "all"
+                    ) {
+
+                        atualizarTabelaOcorrencias(
+                            "todos"
+                        );
+
+                    } else {
+
+                        filtrarMapaPorCategoria(
+                            filtro
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* Filtra marcadores do mapa */
+
+function filtrarMapaPorCategoria(
+    categoria
+) {
+
+    if (!cityMap) {
+        return;
+    }
+
+
+    cityMarkers.forEach(
+        function (marker) {
+
+            const ocorrencia =
+                marker.ocorrencia;
+
+
+            if (!ocorrencia) {
+                return;
+            }
+
+
+            if (
+                ocorrencia.categoria ===
+                categoria
+            ) {
+
+                marker.addTo(
+                    cityMap
+                );
+
+            } else {
+
+                cityMap.removeLayer(
+                    marker
+                );
+
+            }
+
+        }
+    );
 
 }
+
+
+/* ========================================
+   BUSCA DA TABELA
+======================================== */
+
+const searchBox =
+    document.querySelector(
+        ".search-box input"
+    );
+
+
+if (searchBox) {
+
+    searchBox.addEventListener(
+        "input",
+        function () {
+
+            const termo =
+                this.value
+                    .toLowerCase()
+                    .trim();
+
+
+            const linhas =
+                document.querySelectorAll(
+                    ".requests-table tbody tr"
+                );
+
+
+            linhas.forEach(
+                function (linha) {
+
+                    const texto =
+                        linha.textContent
+                            .toLowerCase();
+
+
+                    linha.style.display =
+                        texto.includes(
+                            termo
+                        )
+                            ? ""
+                            : "none";
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* ========================================
+   SELECT DA TABELA
+======================================== */
+
+const tableFilter =
+    document.querySelector(
+        ".requests-toolbar select"
+    );
+
+
+if (tableFilter) {
+
+    tableFilter.addEventListener(
+        "change",
+        function () {
+
+            atualizarTabelaOcorrencias(
+                this.value
+            );
+
+        }
+    );
+
+}
+
+
+/* ========================================
+   MAPA INFERIOR
+======================================== */
+
+function atualizarMapaInferior() {
+
+    if (!realMap) {
+        return;
+    }
+
+
+    // Recria o mapa para atualizar
+    realMap.eachLayer(
+        function (layer) {
+
+            if (
+                layer instanceof
+                L.CircleMarker
+            ) {
+
+                realMap.removeLayer(
+                    layer
+                );
+
+            }
+
+        }
+    );
+
+
+    adicionarPontosExemplo(
+        realMap
+    );
+
+
+    adicionarOcorrenciasAoMapa(
+        realMap
+    );
+
+}
+
+
+/* ========================================
+   INICIALIZAÇÃO
+======================================== */
+
+window.addEventListener(
+    "load",
+    function () {
+
+        inicializarMapaCidade();
+
+        inicializarMapaReal();
+
+        atualizarTabelaOcorrencias();
+
+    }
+);
+
+
+/* ========================================
+   ATUALIZAÇÃO AO VOLTAR PARA A PÁGINA
+======================================== */
+
+window.addEventListener(
+    "storage",
+    function () {
+
+        atualizarTabelaOcorrencias();
+
+        atualizarMapaCidade();
+
+        atualizarMapaInferior();
+
+    }
+);
