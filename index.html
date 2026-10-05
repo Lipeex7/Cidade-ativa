@@ -23,16 +23,11 @@
     <header class="header">
         <div class="container header-content">
 
-            <a href="index.html" class="logo">
-            <img src="images/logo.png" alt="Cidade Ativa">
-    <div>
-        <strong>Cidade Ativa</strong>
-        <span>Prefeitura Municipal</span>
-    </div>
-</a>
-                <div>
+            <a href="index.html" class="logo" aria-label="Cidade Ativa">
+                <span class="logo-mark" aria-hidden="true">CA</span>
+                <div class="logo-text">
                     <strong>Cidade Ativa</strong>
-                    <small>Prefeitura Municipal de Extremoz</small>
+                    <span>Prefeitura Municipal</span>
                 </div>
             </a>
 
@@ -624,68 +619,22 @@
                 <div class="logo">
                     <span class="logo-icon">CA</span>
 
-                    <div>
+                    <div class="logo-text">
                         <strong>Cidade Ativa</strong>
-                        <small>Prefeitura Municipal</small>
+                        <span>Prefeitura Municipal</span>
                     </div>
                 </div>
 
-                <p>
-                    Sua denúncia, nossa ação.
+                <p>Sua denúncia, nossa ação.</p>
 
-                    <style>
-                        .image-preview {
-                            margin-top: 15px;
-                        }
+            </div>
 
-                        .image-preview img {
-                            display: block;
-                            width: 100%;
-                            max-width: 320px;
-                            max-height: 220px;
-                            object-fit: cover;
-                            border-radius: 12px;
-                            margin: 0 auto;
-                        }
-                    </style>
+        </div>
 
-                    <script>
-                        // Pré-visualização da foto
-                        const uploadArea = document.getElementById("uploadArea");
-                        const imageInput = document.getElementById("image");
-                        const fileName = document.getElementById("fileName");
-                        const imagePreview = document.getElementById("imagePreview");
-                        const previewImage = document.getElementById("previewImage");
+    </footer>
 
-                        if (uploadArea && imageInput) {
-                            uploadArea.addEventListener("click", () => imageInput.click());
-
-                            imageInput.addEventListener("change", function () {
-                                const arquivo = this.files[0];
-
-                                if (!arquivo) {
-                                    fileName.textContent = "";
-                                    imagePreview.hidden = true;
-                                    previewImage.src = "";
-                                    return;
-                                }
-
-                                fileName.textContent = arquivo.name;
-
-                                const leitor = new FileReader();
-
-                                leitor.onload = function (evento) {
-                                    previewImage.src = evento.target.result;
-                                    imagePreview.hidden = false;
-                                };
-
-                                leitor.readAsDataURL(arquivo);
-                            });
-                        }
-                    </script>
-
-                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-                    <script src="script.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
 
 </body>
 
