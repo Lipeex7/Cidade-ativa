@@ -1732,11 +1732,15 @@ body.dark-mode .stat-icon.waiting {
   color: #C9A7FF;
 }
 
-/* =========================
+
+
+/* ========================================
    RESPONSIVIDADE - CIDADE ATIVA
-========================= */
+   Mantém o layout original no desktop
+======================================== */
 
 @media (max-width: 1100px) {
+
   .hero-grid {
     gap: 35px;
   }
@@ -1758,9 +1762,14 @@ body.dark-mode .stat-icon.waiting {
     flex-wrap: wrap;
     align-items: center;
   }
+
 }
 
+
 @media (max-width: 900px) {
+
+  /* HEADER */
+
   .header-content {
     min-height: 68px;
   }
@@ -1769,31 +1778,43 @@ body.dark-mode .stat-icon.waiting {
     margin-left: auto;
   }
 
+  /* MENU MOBILE
+     O JavaScript usa a classe is-open. */
+
   .menu-btn {
     display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .nav {
     display: none;
     position: absolute;
-    top: calc(100% + 1px);
+    top: 100%;
     left: 0;
     right: 0;
     flex-direction: column;
     align-items: stretch;
-    padding: 12px 20px 18px;
+    gap: 4px;
+    flex-wrap: nowrap;
+    padding: 15px 20px 20px;
     background: var(--surface);
+    border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     box-shadow: var(--shadow-md);
+    z-index: 1000;
   }
 
-  .nav.active {
+  .nav.is-open {
     display: flex;
   }
 
   .nav a {
     width: 100%;
+    padding: 13px 15px;
   }
+
+  /* HERO */
 
   .hero-grid {
     grid-template-columns: 1fr;
@@ -1804,7 +1825,7 @@ body.dark-mode .stat-icon.waiting {
     text-align: center;
   }
 
-  .hero .eyebrow {
+  .eyebrow {
     margin-left: auto;
     margin-right: auto;
   }
@@ -1822,27 +1843,38 @@ body.dark-mode .stat-icon.waiting {
     justify-content: center;
   }
 
+  /* FORMULÁRIO */
+
   .form-wrapper {
     grid-template-columns: 1fr;
   }
 
+  /* GRÁFICOS */
+
   .charts-grid {
     grid-template-columns: 1fr;
   }
+
+  /* TÍTULOS */
 
   .section-heading {
     flex-direction: column;
     align-items: flex-start;
   }
 
+  /* FILTROS */
+
   .map-filters {
     justify-content: flex-start;
   }
+
 }
 
+
 @media (max-width: 700px) {
+
   .container {
-    width: min(100% - 28px, var(--container));
+    width: min(calc(100% - 28px), var(--container));
   }
 
   .section {
@@ -1852,6 +1884,8 @@ body.dark-mode .stat-icon.waiting {
   .section-sm {
     padding: 45px 0;
   }
+
+  /* HEADER */
 
   .logo-image {
     width: 145px;
@@ -1871,6 +1905,8 @@ body.dark-mode .stat-icon.waiting {
     width: 38px;
     height: 38px;
   }
+
+  /* HERO */
 
   .hero {
     padding: 65px 0 75px;
@@ -1898,9 +1934,7 @@ body.dark-mode .stat-icon.waiting {
     text-align: left;
   }
 
-  .city-footer {
-    grid-template-columns: 1fr;
-  }
+  /* CARDS */
 
   .stats-grid {
     grid-template-columns: 1fr;
@@ -1909,6 +1943,8 @@ body.dark-mode .stat-icon.waiting {
   .categories-grid {
     grid-template-columns: 1fr;
   }
+
+  /* FORMULÁRIO */
 
   .form-wrapper {
     padding: 18px;
@@ -1923,6 +1959,8 @@ body.dark-mode .stat-icon.waiting {
     width: 100%;
   }
 
+  /* ACOMPANHAMENTO */
+
   .tracking-search {
     flex-direction: column;
     align-items: stretch;
@@ -1932,25 +1970,55 @@ body.dark-mode .stat-icon.waiting {
     width: 100%;
   }
 
-  .map-legend {
-    flex-direction: column;
-    align-items: stretch;
-  }
+  /* FILTROS DO MAPA */
 
   .map-filters {
     overflow-x: auto;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    padding-bottom: 4px;
+    padding-bottom: 5px;
+    scrollbar-width: thin;
   }
 
   .filter-btn {
     flex: 0 0 auto;
   }
 
+  /* LEGENDA */
+
+  .map-legend {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* MAPAS */
+
+  .fake-map {
+    min-height: 320px;
+  }
+
   #realMap {
     height: 400px;
   }
+
+  /* TABELA */
+
+  .requests-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .requests-toolbar select {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  /* GRÁFICOS */
 
   .chart-card {
     padding: 18px;
@@ -1967,15 +2035,27 @@ body.dark-mode .stat-icon.waiting {
     height: 160px;
   }
 
+  /* FOOTER */
+
   .footer {
     padding: 45px 15px 35px;
   }
+
+  .footer-cidade-ativa {
+    width: 300px;
+    max-width: 90%;
+  }
+
 }
 
+
 @media (max-width: 480px) {
+
   .container {
     width: calc(100% - 24px);
   }
+
+  /* HEADER */
 
   .logo-image {
     width: 125px;
@@ -1992,17 +2072,36 @@ body.dark-mode .stat-icon.waiting {
     height: 36px;
   }
 
-  .city-top {
-    padding: 14px 16px;
+  /* HERO */
+
+  .hero {
+    padding: 55px 0 65px;
   }
+
+  .hero h1 {
+    font-size: clamp(32px, 11vw, 42px);
+  }
+
+  .hero-trust {
+    gap: 10px;
+  }
+
+  .avatars span {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* MAPA SUPERIOR */
 
   #cityMap {
     height: 230px;
   }
 
-  .city-footer {
-    padding: 14px 16px 18px;
+  .city-top {
+    padding: 14px 16px;
   }
+
+  /* SEÇÕES */
 
   .section-heading {
     margin-bottom: 28px;
@@ -2012,6 +2111,8 @@ body.dark-mode .stat-icon.waiting {
     font-size: 30px;
   }
 
+  /* CARDS */
+
   .stat-card {
     padding: 18px;
   }
@@ -2020,637 +2121,59 @@ body.dark-mode .stat-icon.waiting {
     padding: 18px;
   }
 
+  /* FORMULÁRIO */
+
   .form-intro {
     padding: 18px;
   }
+
+  /* ACOMPANHAMENTO */
 
   .tracking-box {
     padding: 18px;
   }
 
-  .requests-toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .requests-toolbar select {
-    flex: 1 1 auto;
-    width: 100%;
-  }
+  /* MAPA INFERIOR */
 
   #realMap {
     height: 330px;
   }
 
+  /* TABELA */
+
+  .requests-table th,
+  .requests-table td {
+    padding: 13px 14px;
+  }
+
+  /* GRÁFICOS */
+
+  .chart-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  /* FOOTER */
+
   .footer-cidade-ativa {
     width: 260px;
     max-width: 92%;
   }
+
 }
 
-/* =========================================================
-   CORREÇÃO DEFINITIVA DE RESPONSIVIDADE
-   Aplicar no FINAL do arquivo para sobrescrever regras anteriores
-========================================================= */
 
-html,
-body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-img,
-svg,
-video,
-canvas {
-  max-width: 100%;
-}
-
-.container {
-  width: min(100% - 40px, var(--container));
-  max-width: var(--container);
-}
-
-.hero-grid,
-.form-wrapper,
-.map-container,
-.charts-grid,
-.stats-grid,
-.categories-grid,
-.footer-grid {
-  min-width: 0;
-}
-
-.hero-content,
-.hero-visual,
-.city-card,
-.form-intro,
-.report-form,
-.chart-card,
-.stat-card,
-.category-card {
-  min-width: 0;
-  max-width: 100%;
-}
+/* =========================
+   ACESSIBILIDADE NO MOBILE
+========================= */
 
 @media (max-width: 900px) {
-  .header-content {
-    min-height: 68px;
-    padding: 10px 0;
-    gap: 10px;
-  }
-
-  /* No celular/tablet a navegação fica dentro do menu */
-  .header .nav {
-    display: none !important;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1100;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 4px;
-    padding: 12px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    box-shadow: var(--shadow-md);
-  }
-
-  .header .nav.active,
-  .header .nav.is-open {
-    display: flex !important;
-  }
-
-  .header .nav a {
-    width: 100%;
-    padding: 12px 14px;
-  }
-
-  .menu-btn {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .header-actions .btn-primary {
-    display: none;
-  }
-
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-    gap: 35px;
-  }
-
-  .hero-content {
-    text-align: center;
-  }
-
-  .hero .eyebrow {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hero-content p {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hero-buttons {
-    justify-content: center;
-  }
-
-  .hero-trust {
-    justify-content: center;
-  }
-
-  .hero-visual {
-    width: 100%;
-  }
-
-  .city-card {
-    width: 100%;
-  }
-
-  .form-wrapper {
-    grid-template-columns: 1fr !important;
-  }
-
-  .map-container,
-  .charts-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .categories-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 700px) {
-  .container {
-    width: calc(100% - 28px);
-    max-width: none;
-  }
-
-  .header-content {
-    width: 100%;
-  }
-
-  .logo-image {
-    width: 130px;
-    height: 50px;
-  }
-
-  .header-actions {
-    gap: 5px;
-    flex-shrink: 0;
-  }
-
-  .theme-btn,
-  .menu-btn {
-    width: 38px;
-    height: 38px;
-    flex-shrink: 0;
-  }
-
-  .hero {
-    padding: 55px 0 65px;
-  }
-
-  .hero h1 {
-    font-size: clamp(32px, 10vw, 46px);
-    overflow-wrap: anywhere;
-  }
-
-  .hero-content p {
-    font-size: 15px;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .hero-buttons .btn {
-    width: 100%;
-  }
-
-  .hero-trust {
-    align-items: center;
-    text-align: center;
-  }
-
-  .city-map {
-    min-height: 230px;
-  }
-
-  #cityMap {
-    height: 230px;
-  }
-
-  .city-footer {
-    grid-template-columns: 1fr;
-  }
-
-  .stats-grid,
-  .categories-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr !important;
-  }
-
-  .tracking-search {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .tracking-search input,
-  .tracking-search .btn {
-    width: 100%;
-  }
-
-  .map-filters {
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    max-width: 100%;
-    padding-bottom: 5px;
-  }
-
-  .filter-btn {
-    flex: 0 0 auto;
-  }
-
-  .requests-toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .requests-toolbar select,
-  .search-box {
-    width: 100%;
-    flex: 1 1 auto;
-  }
-
-  .requests-table-wrapper {
-    max-width: 100%;
-    overflow-x: auto;
-  }
-
-  .requests-table {
-    min-width: 700px;
-  }
-
-  #realMap {
-    height: 360px;
-  }
-
-  .map-legend {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    width: calc(100% - 24px);
-  }
-
-  .logo-image {
-    width: 120px;
-    height: 46px;
-  }
-
-  .hero h1 {
-    font-size: 2.35rem;
-  }
-
-  .hero-content p {
-    font-size: 14px;
-    line-height: 1.65;
-  }
-
-  .city-card {
-    border-radius: 20px;
-  }
-
-  .city-top {
-    padding: 14px 16px;
-  }
-
-  .city-footer {
-    padding: 14px 16px 18px;
-  }
 
-  .form-wrapper {
-    padding: 16px;
+  .nav.is-open a:focus-visible,
+  .menu-btn:focus-visible,
+  .theme-btn:focus-visible {
+    outline: 3px solid rgba(244, 196, 48, 0.45);
+    outline-offset: 2px;
   }
 
-  .form-intro {
-    padding: 18px;
-  }
-
-  .chart-card {
-    padding: 16px;
-  }
-}
-
-/* =====================================================
-   CORREÇÃO FINAL - MOBILE REAL
-   Use este bloco no final do style.css
-===================================================== */
-
-@media screen and (max-width: 900px) {
-  html,
-  body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  .container {
-    width: calc(100% - 28px) !important;
-    max-width: 100% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .header {
-    width: 100%;
-  }
-
-  .header-content {
-    width: 100%;
-    min-height: 68px;
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 8px;
-  }
-
-  .logo {
-    min-width: 0;
-    flex: 1 1 auto;
-    overflow: hidden;
-  }
-
-  .logo > div,
-  .logo-text {
-    min-width: 0;
-  }
-
-  .logo strong,
-  .logo-text strong {
-    font-size: 1.25rem;
-    white-space: nowrap;
-  }
-
-  .logo small,
-  .logo-text span {
-    font-size: 9px;
-    white-space: nowrap;
-  }
-
-  .header-actions {
-    flex: 0 0 auto;
-    margin-left: 0;
-  }
-
-  .header-actions .btn-primary {
-    display: none !important;
-  }
-
-  .menu-btn {
-    display: inline-flex !important;
-  }
-
-  .nav {
-    display: none !important;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    width: 100%;
-    max-width: 100%;
-    flex-direction: column;
-    align-items: stretch;
-    padding: 12px 14px 18px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    box-shadow: var(--shadow-md);
-    z-index: 1001;
-  }
-
-  .nav.is-open,
-  .nav.active {
-    display: flex !important;
-  }
-
-  .nav a {
-    width: 100%;
-    padding: 12px;
-  }
-
-  .hero {
-    width: 100%;
-    overflow: hidden;
-    padding: 55px 0 65px;
-  }
-
-  .hero-grid {
-    width: 100%;
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 35px;
-  }
-
-  .hero-content,
-  .hero-visual {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .hero-content {
-    text-align: left;
-  }
-
-  .hero h1 {
-    width: 100%;
-    max-width: 100%;
-    font-size: clamp(34px, 10vw, 48px);
-    overflow-wrap: anywhere;
-  }
-
-  .hero-content p {
-    width: 100%;
-    max-width: 100%;
-    font-size: 15px;
-  }
-
-  .hero-buttons {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .hero-buttons .btn {
-    width: 100%;
-  }
-
-  .city-card {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 20px;
-  }
-
-  .city-map {
-    width: 100%;
-    min-height: 230px;
-  }
-
-  .city-footer {
-    width: 100%;
-    grid-template-columns: 1fr !important;
-  }
-
-  .stats-grid,
-  .categories-grid,
-  .charts-grid,
-  .form-wrapper,
-  .map-container {
-    width: 100%;
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-
-  .stat-card,
-  .category-card,
-  .chart-card,
-  .form-wrapper,
-  .tracking-box,
-  .fake-map,
-  .requests-table-wrapper {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .form-row {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-
-  .tracking-search {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .tracking-search input,
-  .tracking-search .btn {
-    width: 100%;
-  }
-
-  .section-heading {
-    display: block;
-  }
-
-  .section-heading p {
-    margin-top: 12px;
-  }
-
-  .map-section .section-heading {
-    display: block;
-  }
-
-  .map-filters {
-    width: 100%;
-    max-width: 100%;
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 5px;
-  }
-
-  .filter-btn {
-    flex: 0 0 auto;
-  }
-
-  .fake-map,
-  #realMap,
-  #cityMap {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .requests-table-wrapper {
-    overflow-x: auto;
-  }
-
-  .requests-table {
-    min-width: 700px;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .container {
-    width: calc(100% - 24px) !important;
-  }
-
-  .header-content {
-    padding: 8px 0;
-  }
-
-  .logo strong,
-  .logo-text strong {
-    font-size: 1.1rem;
-  }
-
-  .logo small,
-  .logo-text span {
-    display: none;
-  }
-
-  .logo-icon,
-  .logo-mark {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
-  }
-
-  .hero {
-    padding: 45px 0 55px;
-  }
-
-  .hero h1 {
-    font-size: 36px;
-  }
-
-  .hero-trust {
-    align-items: flex-start;
-  }
-
-  .form-wrapper {
-    padding: 16px !important;
-  }
-
-  .city-footer {
-    grid-template-columns: 1fr !important;
-  }
-
-  .btn {
-    max-width: 100%;
-  }
 }
